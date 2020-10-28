@@ -12,7 +12,8 @@ int main(void) {
     res = ps::getAllProcesses();
     for (auto e : res) {
         std::cout.width(7);
-        std::cout << e.pid << " " << e.state << std::endl;
+        std::cout << e.pid << " " << e.state << " " <<
+            e.getCommand() << std::endl;
     }
     // ps::Process test(1);
 

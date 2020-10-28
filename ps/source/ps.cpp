@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <string>
 
 namespace ps {
 
@@ -142,6 +143,18 @@ std::vector<Process> getAllProcesses() {
         } catch(std::exception& e) {
             continue;
         }
+    }
+    return result;
+}
+
+// Gets an actual command for a process.
+// If there is no command, returns process name in parentheses.
+std::string Process::getCommand() {
+    std::ifstream cmdfile("/proc/" + std::to_string(pid) + "/cmdline");
+    std::string result;
+    std::getline(cmdfile, result);
+    if (result == "") {
+        result = "[" + comm.substr(1, comm.size() - 2) + "]";
     }
     return result;
 }

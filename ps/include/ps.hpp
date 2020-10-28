@@ -31,6 +31,10 @@ struct Process {
         // Standard destructor
         ~Process();
 
+        // Gets an actual command for a process.
+        // If there is no command, returns process name in parentheses
+        std::string getCommand();
+
         // The process ID.
         int32_t     pid;
 
