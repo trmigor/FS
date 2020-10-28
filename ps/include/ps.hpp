@@ -35,6 +35,9 @@ struct Process {
         // If there is no command, returns process name in parentheses
         std::string getCommand();
 
+        // Gets the controlling terminal of the process.
+        std::string getTty();
+
         // The process ID.
         int32_t     pid;
 

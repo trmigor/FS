@@ -159,4 +159,38 @@ std::string Process::getCommand() {
     return result;
 }
 
+// Gets the controlling terminal of the process.
+std::string Process::getTty() {
+    int32_t major = (tty_nr & (255 << 8)) >> 8;
+    int32_t minor = (tty_nr & 255) + ((tty_nr & (65535 << 16)) >> 8);
+    std::string res;
+    switch (major) {
+        case 4:
+            res = "tty" + std::to_string(minor);
+            break;
+        case 136:
+            res = "pts/" + std::to_string(minor);
+            break;
+        case 5:
+            res = "pts/ptmx";
+            break;
+        case 188:
+            res = "ttyUSB" + std::to_string(minor);
+            break;
+        case 166:
+            res = "ttyACM" + std::to_string(minor);
+            break;
+        case 247:
+            res = "ttyHSL0";
+            break;
+        case 248:
+            res = "ttyHSL0";
+            break;
+        default:
+            res = "?";
+            break;
+    }
+    return res;
+}
+
 }  // namespace ps

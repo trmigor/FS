@@ -2,6 +2,7 @@
     Copyright [2020] <Taraimovych Igor>
 */
 
+#include <unistd.h>
 #include <iostream>
 #include <vector>
 
@@ -10,40 +11,33 @@
 int main(void) {
     std::vector<ps::Process> res;
     res = ps::getAllProcesses();
-    for (auto e : res) {
-        std::cout.width(7);
-        std::cout << e.pid << " " << e.state << " " <<
-            e.getCommand() << std::endl;
-    }
-    // ps::Process test(1);
 
-    /*std::cout << test.pid << " " << test.comm << " " << test.state << " " <<
-    test.ppid << " " <<
-        test.pgrp << " " << test.session << " " << test.tty_nr << " " <<
-        test.tpgid << " " << test.flags << " " << test.minflt << " " <<
-        test.cminflt << " " <<
-        test.majflt << " " << test.cmajflt << " " <<
-        test.utime << " " << test.stime << " " << test.cutime << " " <<
-        test.cstime << " " <<
-        test.priority << " " << test.nice << " " <<
-        test.num_threads << " " << test.itrealvalue << " " <<
-        test.starttime << " " << test.vsize << " " <<
-        test.rss << " " << test.rsslim << " " << test.startcode << " " <<
-        test.endcode << " " <<
-        test.startstack << " " <<
-        test.kstkesp << " " << test.kstkeip << " " << test.signal << " " <<
-        test.blocked << " " <<
-        test.sigignore << " " << test.sigcatch << " " <<
-        test.wchan << " " << test.nswap << " " << test.cnswap << " " <<
-        test.exit_signal << " " <<
-        test.processor << " " <<
-        test.rt_priority << " " << test.policy << " " <<
-        test.delayacct_blkio_ticks << " " <<
-        test.guest_time << " " << test.cguest_time << " " <<
-        test.start_data << " " <<
-        test.end_data << " " <<
-        test.start_brk << " " << test.arg_start << " " <<
-        test.arg_end << " " << test.env_start << " " << test.env_end << " " <<
-        test.exit_code;*/
+    std::cout.width(8);
+    std::cout << "PID" << " ";
+    std::cout.width(7);
+    std::cout << "TTY" << " ";
+    std::cout.width(4);
+    std::cout << "STAT" << " ";
+    std::cout.width(6);
+    std::cout << "TIME" << " ";
+    std::cout << "COMMAND" << std::endl;
+
+    for (auto e : res) {
+        std::cout.width(8);
+        std::cout << e.pid << " ";
+        std::cout.width(7);
+        std::cout << e.getTty() << " ";
+        std::cout.width(4);
+        std::cout << e.state << " ";
+        int64_t time = (e.utime + e.stime) / sysconf(_SC_CLK_TCK);
+        int64_t minutes = time / 60;
+        int64_t seconds = time % 60;
+        std::cout.width(4);
+        std::cout << minutes << ":";
+        std::cout << (seconds < 10 ? "0" : "");
+        std::cout << seconds << " ";
+        std::cout << e.getCommand() << std::endl;
+    }
+
     return EXIT_SUCCESS;
 }
