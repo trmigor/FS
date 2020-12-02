@@ -10,9 +10,12 @@ RESULT = a.out
 all: $(BINARIES)
 	g++ $(CPPFLAGS) -o $(RESULT) $(BINARIES)
 
-$(BINARIES): $(SOURCES)
+$(BINARIES): build $(SOURCES)
 	g++ $(CPPFLAGS) -c -o $@ source/$(subst build/,,$(subst .o,,$@)).cpp 
+
+build:
+	mkdir build
 
 .PHONY: clean
 clean:
-	rm -rf build/* $(RESULT)
+	rm -rf build $(RESULT)
