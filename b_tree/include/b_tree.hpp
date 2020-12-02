@@ -144,6 +144,11 @@ class b_tree {
             print_node(root_, 0);
         }
 
+        b_tree& operator+=(const b_tree& other) {
+            insert_all_nodes(other.root_);
+            return *this;
+        }
+
     private:
         typedef __b_node<order, T>  node_;
         typedef __cell<T>           cell_;
@@ -152,6 +157,20 @@ class b_tree {
         const size_t max_child_ = 2 * order + 1;
 
         node_* root_;
+
+        void insert_all_nodes(node_* node) {
+            if (node == nullptr) {
+                return;
+            }
+            for (cell_ e : node->cells) {
+                if (!e.deleted && e.key != 0) {
+                    insert(e.key, e.value);
+                }
+            }
+            for (node_* e : node->children) {
+                insert_all_nodes(e);
+            }
+        }
 
         void delete_node(node_* node) {
             if (node == nullptr) {
